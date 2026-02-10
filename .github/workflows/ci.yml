@@ -25,3 +25,18 @@ jobs:
 
       - name: Output logs
         run: echo "CI pipeline completed"
+
+      - name: Notify Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"CI Pipeline SUCCESS for devops-webapp"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"CI Pipeline FAILED for devops-webapp"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+
